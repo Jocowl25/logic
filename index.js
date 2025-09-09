@@ -35,6 +35,9 @@ varButton.addEventListener("click",()=>{
 premInput.addEventListener("change",()=>{
         premInput.value=premInput.value.toUpperCase();
 })
+concInput.addEventListener("change",()=>{
+        concInput.value=concInput.value.toUpperCase();
+})
 
     premButton.addEventListener("click",()=>{
         premInput.value=premInput.value.toUpperCase()
@@ -47,6 +50,7 @@ premInput.addEventListener("change",()=>{
 function parsePremise(input){ //TO DO: fix this
     for(let i=0;i<input.length;i++){
             if(!letters.includes(input[i])&&!operators.includes(input[i])){
+                alert("invalid something or other")
                 return false;
             }
         }
