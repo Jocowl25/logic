@@ -106,6 +106,10 @@ function parsePremise(input){ //TO DO: check edge cases
                 alert(`adjacent operations! see char ${i}`)
                 return false;
                 }
+                if(innerOperators.includes(inputArr[i])){
+                    alert(`adjacent operations! see char ${i}`)
+                    return false;
+                }
             }
             if(!(inputArr[i-1]==")")&&(!(inputArr[i-1]=="("||inputArr[i-2]=="("))&&(!(inputArr[i+1]==")"||inputArr[i+2]==")"))&&innerOperators.includes(inputArr[i])){
                 alert(`ambiguous statement! see char ${i}`)
