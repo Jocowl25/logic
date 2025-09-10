@@ -49,8 +49,6 @@ concInput.addEventListener("change",()=>{
         if(input){
             premList.innerHTML+=input.join("")+"<br>"
             premises.push(input)
-        }else{
-            alert("invalid stupid")
         }
         })
 
@@ -60,10 +58,8 @@ concInput.addEventListener("change",()=>{
         input=parsePremise(input)
         if(input){
             conclusion=input
-        }else{
-            alert("invalid stupid")
+            doTheThing()
         }
-        doTheThing()
         })
 
 function doTheThing(){
@@ -71,7 +67,7 @@ function doTheThing(){
         console.log(conclusion)
 }
 
-function parsePremise(input){ //TO DO: fix this
+function parsePremise(input){ //TO DO: check edge cases
     let inputArr=input.split("")
     for(let i=0;i<inputArr.length;i++){
         if(inputArr[i]=="-"){
@@ -111,6 +107,10 @@ function parsePremise(input){ //TO DO: fix this
                 return false;
                 }
             }
+            if(!(inputArr[i-1]==")")&&(!(inputArr[i-1]=="("||inputArr[i-2]=="("))&&(!(inputArr[i+1]==")"||inputArr[i+2]==")"))&&innerOperators.includes(inputArr[i])){
+                alert(`ambiguous statement! see char ${i}`)
+                return false
+            }
             if(inputArr[i]=="("){
                 parenCount++
             }
@@ -119,7 +119,7 @@ function parsePremise(input){ //TO DO: fix this
             }
             continue;
         }
-        alert(`invalid symbol! see char ${i}`)
+        alert(`invalid variable or symbol! see char ${i}`)
         return false
 }
 if(parenCount!=0){
