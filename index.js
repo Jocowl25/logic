@@ -25,10 +25,17 @@ const premButton=document.querySelector(".premButton")
 const concButton=document.querySelector(".concButton")
 const premList=document.querySelector(".premList")
 
+varInput.addEventListener("click",()=>{
+    varInput.value=""
+})
+
 varButton.addEventListener("click",()=>{
     if(alphabet.includes(varInput.value)&&!letters.includes(varInput.value)){
     letters.push(varInput.value)
     varlist.innerHTML+=varInput.value+" "
+    }
+    if(varInput.value=="V"){
+        alert("No v allowed,sorry, I don't want to force a distinction between v and V")
     }
 })
 
@@ -106,12 +113,12 @@ function parsePremise(input){ //TO DO: check edge cases
                 alert(`adjacent operations! see char ${i}`)
                 return false;
                 }
-                if(innerOperators.includes(inputArr[i])){
+                if(innerOperators.includes(inputArr[i])&&inputArr[i+1]!="~"&&inputArr[i+1]!="("&&inputArr[i-1]!=")"){
                     alert(`adjacent operations! see char ${i}`)
                     return false;
                 }
             }
-            if(!(inputArr[i-1]==")")&&(!(inputArr[i-1]=="("||inputArr[i-2]=="("))&&(!(inputArr[i+1]==")"||inputArr[i+2]==")"))&&innerOperators.includes(inputArr[i])){
+            if(!(inputArr[i-1]==")")&&(!(inputArr[i-1]=="("||inputArr[i-2]=="("))&&(!(inputArr[i+1]==")"||inputArr[i+2]==")"))&&innerOperators.includes(inputArr[i])&&(!(inputArr[i+1]=="~"&&(inputArr[i+2]==")"||inputArr[i+2]=="(")))){
                 alert(`ambiguous statement! see char ${i}`)
                 return false
             }
@@ -127,7 +134,7 @@ function parsePremise(input){ //TO DO: check edge cases
         return false
 }
 if(parenCount!=0){
-        alert(`paren count off! see char ${i}`)
+        alert(`paren count off!`)
     return false;
 }
 return inputArr;
