@@ -52,7 +52,7 @@ concInput.addEventListener("change",()=>{
     premButton.addEventListener("click",()=>{
         premInput.value=premInput.value.toUpperCase()
         let input=premInput.value
-        input=parsePremise(input)
+        input=validatePremise(input)
         if(input){
             premList.innerHTML+=input.join("")+"<br>"
             premises.push(input)
@@ -62,7 +62,7 @@ concInput.addEventListener("change",()=>{
         concButton.addEventListener("click",()=>{
         concInput.value=concInput.value.toUpperCase()
         let input=concInput.value
-        input=parsePremise(input)
+        input=validatePremise(input)
         if(input){
             conclusion=input
             doTheThing()
@@ -72,9 +72,38 @@ concInput.addEventListener("change",()=>{
 function doTheThing(){
         console.log(premises)
         console.log(conclusion)
+        const truthVals=new Array(letters.length)
+        let state=2**(letters.length+1);
+	    let binaryState=state.toString(2);
+        while(state>2**(letters.length)){
+            state--
+            binaryState=state.toString(2);
+            for(let i=0;i<truthVals.length;i++){
+                if(binaryState.charAt(i+1)==1){
+                    truthVals[i]=true
+                }else{
+                    truthVals[i]=false
+                }
+            }
+            const premiseVals=[]
+            for(let i=0;i<premises.length;i++){
+                premiseVals.push(parsePremise(premises[i],truthVals))
+            }
+            console.log(parsePremise(conclusion,truthVals))
+        }
+    }
+
+function parsePremise(input,truthVals){ //truthVals correspond with letters array
+    for(let i=0;i<input.length;i++){
+        if(letters.includes(input[i])){
+            input[i]=truthVals[letters.indexOf(input[i])]
+            alert(letters.indexOf(input[i]))
+       }
+    }
+    return input;
 }
 
-function parsePremise(input){ //TO DO: check edge cases
+function validatePremise(input){ //TO DO: check edge cases
     let inputArr=input.split("")
     for(let i=0;i<inputArr.length;i++){
         if(inputArr[i]=="-"){
