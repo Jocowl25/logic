@@ -70,8 +70,8 @@ concInput.addEventListener("change",()=>{
         })
 
 function doTheThing(){
-        console.log(premises)
-        console.log(conclusion)
+        //console.log(premises)
+        //console.log(conclusion)
         const truthVals=new Array(letters.length)
         let state=2**(letters.length+1);
 	    let binaryState=state.toString(2);
@@ -94,13 +94,13 @@ function doTheThing(){
     }
 
 function parsePremise(input,truthVals){ //truthVals correspond with letters array
-    for(let i=0;i<input.length;i++){
-        if(letters.includes(input[i])){
-            input[i]=truthVals[letters.indexOf(input[i])]
-            alert(letters.indexOf(input[i]))
+    output=[...input]
+    for(let i=0;i<output.length;i++){
+        if(letters.includes(output[i])){
+            output[i]=truthVals[letters.indexOf(output[i])]
        }
     }
-    return input;
+    return output;
 }
 
 function validatePremise(input){ //TO DO: check edge cases
