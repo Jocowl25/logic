@@ -84,8 +84,17 @@ function doTheThing(){
             for(let i=0;i<premises.length;i++){
                 premiseVals.push(parsePremise(premises[i],truthVals))
             }
-            console.log(parsePremise(conclusion,truthVals))
+            let premListVal=premiseVals.every(bool => bool==true)
+            let concval=parsePremise(conclusion,truthVals)
+            if(premiseVals.length==0){
+                alert("I guess its empty idk")
+            }
+            if(premListVal==concval){
+                alert("Yeee its true wowowowowow")
+                return
+            }
         }
+        alert("nah not possible fam")
     }
 
 function parsePremise(input,truthVals){ //truthVals correspond with letters array
