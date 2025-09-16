@@ -1,18 +1,13 @@
-function and(a,b){
-    return a&&b
-}
-function or(a,b){
-    return a||b
-}
-function ifThen(a,b){
-    return !(a&&!b)
-}
-function onlyIf(a,b){
-    return (a==b)
-}
+
+const comparisonFunctions=[
+    (a,b)=>{return a&&b}, //and
+    (a,b)=>{return a||b}, //or
+    (a,b)=>{return !(a&&!b)}, //if then
+    (a,b)=>{return a==b} //if and only if
+]
 const alphabet="QWERTYUIOPASDFGHJKLZXCBNM".split("")
 const operators="~,->,<->,&,v,(,)".split(",")
-const innerOperators="->,<->,&,v".split(",")
+const innerOperators="&,v,->,<->".split(",")
 const letters=[];
 const premises=[]
 let conclusion;
@@ -95,15 +90,59 @@ function doTheThing(){
 
 function parsePremise(input,truthVals){ //truthVals correspond with letters array
     output=[...input]
+    let newInputOne=[];
+    let newInputTwo=[];
+    let parenCount=0;
+    let not=[false,false]
+    let firstHalfBool=true
+    let operatorType;
     for(let i=0;i<output.length;i++){
-        if(letters.includes(output[i])){
-            output[i]=truthVals[letters.indexOf(output[i])]
+        char=output[i]
+        if(letters.includes(char)){
+            if(output[i-1]=="~"){
+            output[i]=!truthVals[letters.indexOf(char)]
+            }else{
+            output[i]=truthVals[letters.indexOf(char)]
+            }
        }
+        if(char=="("){
+            parenCount++
+        }else if(char==")"){
+            parenCount--
+        } 
+        if(parenCount>0&&char!="("){
+            if(firstHalfBool){
+            newInputOne.push(char)
+            }else{
+            newInputTwo.push(char)
+            }
+        }
+         
+        if(char=="~"&&output[i+1]=="("){
+            if(firstHalfBool){
+            not[0]=true
+            }else{
+            not[1]=true
+            }
+        }
+        if(innerOperators.includes(char)&&parenCount==0){
+            firstHalfBool=false
+            operatorType=innerOperators.indexOf(char)
+        }
     }
-    return output;
+    
+    console.log(newInputOne,newInputTwo)
+    if(newInputOne.length==0){
+    output=output.filter(item => item != '~');
+    return comparisonFunctions[operatorType](output[0],output[2])
+    }
+    if(newInputTwo.length==0){
+    return parsePremise(newInputOne,truthVals)
+    }
+    return comparisonFunctions[operatorType](parsePremise(newInputOne,truthVals),parsePremise(newInputTwo,truthVals))
 }
 
-function validatePremise(input){ //TO DO: check edge cases
+function validatePremise(input){ 
     let inputArr=input.split("")
     for(let i=0;i<inputArr.length;i++){
         if(inputArr[i]=="-"){
@@ -147,10 +186,10 @@ function validatePremise(input){ //TO DO: check edge cases
                     return false;
                 }
             }
-            if(!(inputArr[i-1]==")")&&(!(inputArr[i-1]=="("||inputArr[i-2]=="("))&&(!(inputArr[i+1]==")"||inputArr[i+2]==")"))&&innerOperators.includes(inputArr[i])&&(!(inputArr[i+1]=="~"&&(inputArr[i+2]==")"||inputArr[i+2]=="(")))){
-                alert(`ambiguous statement! see char ${i}`)
-                return false
-            }
+          //  if(!(inputArr[i-1]==")")&&(!(inputArr[i-1]=="("||inputArr[i-2]=="("))&&(!(inputArr[i+1]==")"||inputArr[i+2]==")"))&&innerOperators.includes(inputArr[i])&&(!(inputArr[i+1]=="~"&&(inputArr[i+2]==")"||inputArr[i+2]=="(")))){
+            //    alert(`ambiguous statement! see char ${i}`)
+           //     return false
+          //  }
             if(inputArr[i]=="("){
                 parenCount++
             }
